@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+data/*.db
+.venv/
+venv/
+env/
+.streamlit/secrets.toml
+.pytest_cache/
+frontend_backup/
+
+# Local Claude Code tooling & session transcripts (may contain secrets)
+.claude/
+.plans/

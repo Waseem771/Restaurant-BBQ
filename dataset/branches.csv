@@ -1,0 +1,4 @@
+branch_id,branch_name,city,popularity_weight
+1,Main Branch,Karachi,1.2
+2,North Branch,Lahore,1.0
+3,Downtown Branch,Islamabad,0.9
