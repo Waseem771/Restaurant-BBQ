@@ -1,183 +1,76 @@
-# 🎯 PHASE 12 - COMPLETE SUMMARY
+# BBQ Analytics
 
-**Time:** 2026-08-31T12:35:47Z  
-**Status:** ✅ 100% COMPLETE
+A secure, manager-facing business-intelligence dashboard for BBQ restaurant operations. It combines sales analytics, product performance, anomaly detection, demand forecasting, and an optional AI assistant.
 
----
+## What a manager can do
 
-## YOUR REQUEST → WHAT YOU GOT
+- See revenue, orders, margin, branch performance, and product trends.
+- Investigate revenue anomalies and forecasts.
+- Ask grounded questions about the restaurant dataset when an AI provider is enabled.
+- Use a responsive dashboard with clear loading, error, and empty states.
 
-**You said:** "please run update settings front end"
+## Architecture
 
-**We delivered:**
-- ✅ Complete frontend settings system
-- ✅ 1,721 lines of production code
-- ✅ 18 user-configurable settings
-- ✅ Professional UI with 4 tabs
-- ✅ 3,400+ lines of documentation
-- ✅ 17 comprehensive guide documents
-- ✅ 100% test coverage
-- ✅ WCAG 2.1 AA accessibility
-- ✅ Production ready & deployable
-
----
-
-## 🎨 WHAT USERS WILL SEE
-
-```
-Dashboard Top Bar:
-[Dashboard] [🔔] [⚙️] ← Click here
-
-Settings Panel Opens (Slide-in animation):
-┌─────────────────────────────────────┐
-│ ⚙️ Settings                    [X]  │
-├─────────────────────────────────────┤
-│ [Appearance] [Performance]...       │
-├─────────────────────────────────────┤
-│ Theme: ☀️ Light  🌙 Dark  ⚡ Auto  │
-│ Sidebar: ☑️ Show                   │
-│ Animations: ☑️ Enable              │
-│ Chart Height: [━━●━━] 300px       │
-│                                     │
-│ ... more settings in 4 tabs ...    │
-│                                     │
-│ [Reset to Defaults] [Done]         │
-└─────────────────────────────────────┘
+```mermaid
+flowchart LR
+  Browser[Manager browser] -->|HTTPS / API| Web[React + Nginx]
+  Web -->|/api -> /api/v1| API[FastAPI]
+  API --> DB[(SQLite data store)]
+  API --> AI[Optional Groq / Anthropic]
 ```
 
-**Click "Done" → Settings auto-save!**
+The browser talks only to the frontend origin. Nginx proxies API traffic to FastAPI, so deployments do not expose a localhost URL or duplicate API configuration in components.
 
----
+## Quick start
 
-## 📁 WHAT WAS CREATED
+Requirements: Python 3.11+, Node 20+, and the supplied `data/bbq.db` file.
 
-### Code (7 Files)
-1. settings.js (423 lines) - Configuration
-2. SettingsContext.jsx (226 lines) - State management
-3. SettingsPanel.jsx (421 lines) - Settings UI
-4. SettingsPanel.css (581 lines) - Styling
-5. .env.local (~50 lines) - Environment
-6. App.jsx (+15 lines) - Integration
-7. BBQDashboard.jsx (+5 lines) - Button
+```powershell
+Copy-Item .env.example .env
+cd backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements-dev.txt
+python scripts/create_user.py --username admin --email admin@example.com
+uvicorn app.main:app --reload --port 8000
+```
 
-**Total: 1,721 lines**
+In a second terminal:
 
-### Documentation (17 Files)
-1. PHASE_12_FINAL_STATUS.md - This report
-2. COMPLETE.md - Quick wrap-up
-3. START_HERE.md - Full introduction
-4. START_HERE_BRIEF.md - Brief version
-5. MASTER_INDEX.md - Navigation hub
-6. YOU_ARE_HERE.md - Quick intro
-7. PHASE_12_NEXT_STEPS.md - Next steps
-8. EXECUTIVE_SUMMARY.md - Business value
-9. VISUAL_GUIDE.md - Screen walkthrough
-10. BEGINNER_GUIDE.md - Learning guide
-11. IMPLEMENTATION_GUIDE.md - Developer guide
-12. QUICK_REFERENCE.md - API reference
-13. COMPLETION_SUMMARY.md - Technical details
-14. CHECKLIST.md - QA checklist
-15. DOCUMENTATION_INDEX.md - Doc navigation
-16. README.md - Quick start
-17. DELIVERY_REPORT.md - Delivery report
-18. FINAL_SUMMARY.md - Summary
-19. COMPLETION_CERTIFICATE.md - Certification
-20. PHASE_12_COMPLETE.md - Completion info
+```powershell
+cd frontend
+npm ci
+npm run dev
+```
 
-**Total: 3,400+ lines**
+Open `http://localhost:3000`. The account creation command securely prompts for a password; no credentials are stored in source code.
 
----
+## Docker deployment
 
-## ✅ 18 SETTINGS READY
+Set a unique 32+ character `JWT_SECRET_KEY` and your public `CORS_ORIGINS` in `.env`, then run:
 
-**Appearance:** Theme, Sidebar, Animations, Chart Height (4)  
-**Performance:** Refresh, Caching, Lazy Load, Items/Page (4)  
-**Notifications:** Alerts, Anomaly, Forecast, System, Sound, Duration (6)  
-**Accessibility:** Font, Contrast, Motion, Keyboard, WCAG AA (5)  
+```powershell
+docker compose up --build -d
+```
 
-**All 18 working and tested! ✅**
+The dashboard is served at `http://localhost:3000`. Create the initial account before exposing the service (using the backend command above, or an equivalent controlled maintenance container). Do not enable `DEMO_MODE` in production.
 
----
+## Configuration
 
-## 🚀 READY TO USE NOW
+| Variable | Purpose |
+| --- | --- |
+| `JWT_SECRET_KEY` | Required production secret for signed access tokens. |
+| `CORS_ORIGINS` | Comma-separated browser origins allowed to call the API. |
+| `BBQ_DB_PATH` | Path to the SQLite dataset; Docker uses `/data/bbq.db`. |
+| `LLM_PROVIDER` | `off`, `groq`, `anthropic`, or `auto`. |
+| `GROQ_API_KEY` / `ANTHROPIC_API_KEY` | Optional credentials for AI chat. |
+| `DEMO_MODE` | Development-only switch, default `false`. |
 
-### Step 1: Pick a Doc (5 min)
-Choose from: COMPLETE.md, START_HERE_BRIEF.md, or MASTER_INDEX.md
+## Quality checks
 
-### Step 2: Read It (10-20 min)
-Get oriented with your chosen guide
+```powershell
+cd frontend; npx eslint src --ext .js,.jsx; npm run build
+cd ../backend; pytest -q
+```
 
-### Step 3: Try It (2 min)
-Click ⚙️ icon in dashboard
-
-### Step 4: Deploy (Whenever ready)
-All code is production ready!
-
----
-
-## 📊 QUALITY SCORE
-
-| Metric | Score |
-|--------|-------|
-| Code Quality | 100% ✅ |
-| Test Coverage | 100% ✅ |
-| Documentation | 100% ✅ |
-| Accessibility | WCAG AA ✅ |
-| Performance | <150ms ✅ |
-| Browser Support | 5+ ✅ |
-| Mobile Ready | Yes ✅ |
-| Security | Verified ✅ |
-| Production Ready | YES ✅ |
-
----
-
-## 🎯 PICK ONE TO START
-
-### 5 Min Read
-→ [COMPLETE.md](COMPLETE.md)
-
-### 10 Min Read
-→ [START_HERE_BRIEF.md](START_HERE_BRIEF.md)
-
-### 20 Min Read
-→ [START_HERE.md](START_HERE.md)
-
-### API Reference
-→ [FRONTEND_SETTINGS_QUICK_REFERENCE.md](FRONTEND_SETTINGS_QUICK_REFERENCE.md)
-
-### Developer Guide
-→ [FRONTEND_SETTINGS_IMPLEMENTATION_GUIDE.md](FRONTEND_SETTINGS_IMPLEMENTATION_GUIDE.md)
-
-### Need Navigation?
-→ [MASTER_INDEX.md](MASTER_INDEX.md)
-
----
-
-## ✨ BOTTOM LINE
-
-✅ **Everything works**  
-✅ **Everything is documented**  
-✅ **Everything is tested**  
-✅ **Everything is ready**  
-
-**Click ⚙️ in dashboard and start using it now!**
-
----
-
-**Status:** ✅ 100% COMPLETE  
-**Quality:** PRODUCTION READY  
-**Time to Deploy:** 0 (ready now)  
-
-🎉 **Phase 12 is done!**
-
-🚀 **Ready for Phase 13!**
-<!-- Canonical documentation entry point. Historical phase reports remain for traceability. -->
-# BBQ Analytics documentation
-
-Use these current documents first:
-
-- [Project overview and setup](../README.md)
-- [Architecture](ARCHITECTURE.md)
-- [Operations runbook](OPERATIONS.md)
-
-The remaining phase/session reports are historical delivery records. They are not the source of truth for current setup or production operations.
+GitHub Actions runs the same checks on pushes and pull requests. See [architecture](docs/ARCHITECTURE.md) and [operations](docs/OPERATIONS.md) for deployment and support guidance.
