@@ -47,9 +47,8 @@ def _path_env(name: str, default: Path) -> Path:
 DATA_DIR: Path = _path_env("BBQ_DATA_DIR", PROJECT_ROOT / "data")
 DB_PATH: Path = _path_env("BBQ_DB_PATH", DATA_DIR / "bbq.db")
 
-# The Phase 1 CSVs live in a sibling `dataset/` folder by default:
-#   Projects/dataset/*.csv   (this app lives in Projects/BBQ.../)
-DATASET_DIR: Path = _path_env("BBQ_DATASET_DIR", PROJECT_ROOT.parent / "dataset")
+# The Phase 1 CSVs live in a `dataset/` folder by default:
+DATASET_DIR: Path = _path_env("BBQ_DATASET_DIR", PROJECT_ROOT / "dataset")
 
 # --- AI assistant ---------------------------------------------------------
 # Which backend translates questions into SQL and phrases the answer.

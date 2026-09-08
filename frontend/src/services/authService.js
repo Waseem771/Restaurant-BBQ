@@ -4,7 +4,7 @@ const SESSION_KEY = 'bbq_user_session';
 
 class AuthService {
   async login(username, password) {
-    const data = await apiRequest('/auth/login', {
+    const data = await apiRequest('/v1/auth/login', {
       method: 'POST',
       body: JSON.stringify({ username, password }),
     });
@@ -12,7 +12,7 @@ class AuthService {
   }
 
   async demoLogin() {
-    const data = await apiRequest('/auth/demo', { method: 'POST' });
+    const data = await apiRequest('/v1/auth/demo', { method: 'POST' });
     return { ...data.user, token: data.access_token, expiresIn: data.expires_in };
   }
 

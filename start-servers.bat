@@ -17,7 +17,7 @@ echo.
 
 REM Start Backend in new terminal
 echo Starting Backend (FastAPI on port 8000)...
-start cmd /k "cd /d "%PROJECT_ROOT%" && python -m uvicorn app.main:app --reload --port 8000"
+start cmd /k "cd /d "%PROJECT_ROOT%backend" && .venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8000"
 
 REM Wait a bit for backend to start
 timeout /t 2 /nobreak

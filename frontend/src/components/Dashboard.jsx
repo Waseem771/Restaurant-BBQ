@@ -141,9 +141,9 @@ function Overview({ period = 'all' }) {
       setBusy(true);
       try {
         const [k, m, a] = await Promise.all([
-          api(`/dashboard/kpis?period=${period}`),
-          api(`/sales/monthly?period=${period}`),
-          api('/anomalies?threshold=0.2'),
+          api(`/v1/dashboard/kpis?period=${period}`),
+          api(`/v1/sales/monthly?period=${period}`),
+          api('/v1/anomalies?threshold=0.2'),
         ]);
 
         if (cancelled) return;
@@ -303,11 +303,11 @@ function Analytics() {
     const loadData = async () => {
       try {
         const [b, m, w, mc, d] = await Promise.all([
-          api('/sales/by-branch'),
-          api('/sales/monthly'),
-          api('/sales/weekend-vs-weekday'),
-          api('/sales/month-compare'),
-          api('/sales/daily'),
+          api('/v1/sales/by-branch'),
+          api('/v1/sales/monthly'),
+          api('/v1/sales/weekend-vs-weekday'),
+          api('/v1/sales/month-compare'),
+          api('/v1/sales/daily'),
         ]);
 
         if (Array.isArray(b)) setBranches(b);
@@ -476,8 +476,8 @@ function Products() {
     const loadData = async () => {
       try {
         const [p, c] = await Promise.all([
-          api('/products/top?limit=14'),
-          api('/products/categories')
+          api('/v1/products/top?limit=14'),
+          api('/v1/products/categories')
         ]);
 
         if (Array.isArray(p)) setProducts(p);
@@ -615,8 +615,8 @@ function Forecasting() {
     const loadData = async () => {
       try {
         const [m, bd] = await Promise.all([
-          api('/sales/monthly'),
-          api('/sales/best-day')
+          api('/v1/sales/monthly'),
+          api('/v1/sales/best-day')
         ]);
 
         if (Array.isArray(m)) setMonthly(m);
@@ -745,7 +745,7 @@ function Alerts() {
   const load = useCallback((t) => {
     setBusy(true);
     setError(null);
-    api(`/anomalies?threshold=${t}`).then((data) => {
+    api(`/v1/anomalies?threshold=${t}`).then((data) => {
       try {
         if (Array.isArray(data)) setAnomalies(data);
         else setAnomalies([]);
@@ -920,7 +920,7 @@ function AIChat() {
       setMessages((prev) => [...prev, { role: 'user', text: question }]);
       setBusy(true);
 
-      const data = await apiRequest('/ai/chat', {
+      const data = await apiRequest('/v1/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question }),
@@ -1035,7 +1035,7 @@ function DashboardContent({ user, onLogout }) {
 
   useEffect(() => {
     try {
-      api('/anomalies?threshold=0.2').then((d) => {
+      api('/v1/anomalies?threshold=0.2').then((d) => {
         if (Array.isArray(d)) setAnomalyCount(d.length);
         else setAnomalyCount(0);
       }).catch((err) => {
