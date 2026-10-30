@@ -4,6 +4,16 @@ import LoginPage from './components/LoginPage';
 import authService from './services/authService';
 import './App.css';
 
+/** True when a JWT is missing, malformed, or past its `exp` claim. */
+function isTokenExpired(token) {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return !payload.exp || payload.exp * 1000 <= Date.now();
+  } catch {
+    return true;
+  }
+}
+
 // Charts and AI UI load only after a successful sign-in.
 const Dashboard = lazy(() => import('./components/Dashboard'));
 
@@ -34,7 +44,13 @@ function AppContent() {
     if (sessionData) {
       try {
         const parsedSession = JSON.parse(sessionData);
-        setUser(parsedSession);
+        if (isTokenExpired(parsedSession.token)) {
+          // Stale session: every API call would fail and the dashboard would
+          // show empty "—" values. Send the user back to the login screen.
+          authService.logout();
+        } else {
+          setUser(parsedSession);
+        }
       } catch (err) {
         console.error('Failed to parse session:', err);
         localStorage.removeItem('bbq_user_session');
@@ -54,9 +70,12 @@ function AppContent() {
     root.style.setProperty('--color-success', config.COLORS.success);
     root.style.setProperty('--color-warning', config.COLORS.warning);
     root.style.setProperty('--color-error', config.COLORS.error);
-    root.style.setProperty('--color-background', config.COLORS.background);
-    root.style.setProperty('--color-surface', config.COLORS.surface);
-    root.style.setProperty('--color-text', config.COLORS.text);
+    // Surface, background and text colours come from the light/dark theme in
+    // App.css. Forcing the dark config values here made cards dark while the
+    // text stayed dark (light theme), so headings and values were unreadable.
+    for (const v of ['--color-background', '--color-surface', '--color-text']) {
+      root.style.removeProperty(v);
+    }
 
     // Set typography
     root.style.setProperty('--font-family-default', config.TYPOGRAPHY.fontFamily.default);
@@ -76,6 +95,13 @@ function AppContent() {
       console.log('User:', user);
     }
   }, [config, settings, user]);
+
+  // api.js fires this when the backend rejects the token (401).
+  useEffect(() => {
+    const onExpired = () => { authService.logout(); setUser(null); };
+    window.addEventListener('bbq:auth-expired', onExpired);
+    return () => window.removeEventListener('bbq:auth-expired', onExpired);
+  }, []);
 
   const handleLoginSuccess = (sessionData) => {
     setUser(sessionData);

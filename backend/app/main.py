@@ -43,12 +43,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=list(config.CORS_ORIGINS),
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type"],
-)
 
 
 @app.middleware("http")
@@ -65,6 +59,17 @@ async def require_api_authentication(request: Request, call_next):
         except HTTPException as exc:
             return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
     return await call_next(request)
+
+
+# CORS must be registered AFTER the auth middleware so it is the outermost
+# layer. Otherwise 401 responses carry no CORS headers, the browser reports
+# "Failed to fetch", and the frontend can't tell the session has expired.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=list(config.CORS_ORIGINS),
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
+)
 
 # Include API route routers
 app.include_router(anomalies.router)

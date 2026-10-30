@@ -19,9 +19,11 @@
   /* Neutral Palette - Light Theme */
   --color-bg-primary: #F8F6F2;
   --color-bg-secondary: #FFFFFF;
+  /* Cards/panels follow the active theme (used throughout Dashboard.jsx) */
+  --color-surface: var(--color-bg-secondary);
   --color-text-primary: #1A1A1A;
-  --color-text-secondary: #5C5C5C;
-  --color-text-tertiary: #8B8B8B;
+  --color-text-secondary: #4A4A4A;
+  --color-text-tertiary: #666666;
   --color-border: #E8E6E2;
   --color-divider: #E0DDD8;
 
@@ -96,9 +98,10 @@
   :root:not([data-theme="light"]) {
     --color-bg-primary: #0F1419;
     --color-bg-secondary: #1A1F2E;
+    --color-surface: #1A1F2E;
     --color-text-primary: #F5F5F5;
-    --color-text-secondary: #B8B8B8;
-    --color-text-tertiary: #7A7A7A;
+    --color-text-secondary: #C8CCD4;
+    --color-text-tertiary: #9AA0AA;
     --color-border: #2A2F3E;
     --color-divider: #242B3B;
     --color-primary-light: #FF6B35;
@@ -108,9 +111,10 @@
 :root[data-theme="dark"] {
   --color-bg-primary: #0F1419;
   --color-bg-secondary: #1A1F2E;
+    --color-surface: #1A1F2E;
   --color-text-primary: #F5F5F5;
-  --color-text-secondary: #B8B8B8;
-  --color-text-tertiary: #7A7A7A;
+  --color-text-secondary: #C8CCD4;
+  --color-text-tertiary: #9AA0AA;
   --color-border: #2A2F3E;
   --color-divider: #242B3B;
   --color-primary-light: #FF6B35;

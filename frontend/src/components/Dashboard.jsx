@@ -241,7 +241,7 @@ function Overview({ period = 'all' }) {
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
                 <XAxis dataKey="month" stroke="var(--color-text-tertiary)" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis stroke="var(--color-text-tertiary)" tickFormatter={(v) => `₨${(v / 1000).toFixed(0)}k`} axisLine={false} tickLine={false} />
+                <YAxis stroke="var(--color-text-tertiary)" width={64} tickFormatter={(v) => (v >= 1e6 ? `Rs ${(v / 1e6).toFixed(1)}M` : `Rs ${(v / 1000).toFixed(0)}k`)} axisLine={false} tickLine={false} />
                 <Tooltip content={<Tip />} />
                 <Area type="monotone" dataKey="revenue" stroke="var(--color-primary)" fill="url(#g1_new)" strokeWidth={3} name="Revenue" />
               </AreaChart>
@@ -423,7 +423,7 @@ function Analytics() {
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
                 <XAxis dataKey="date" stroke="var(--color-text-tertiary)" tick={{ fontSize: 10 }}
                   interval={Math.floor(daily.length / 6)} axisLine={false} tickLine={false} />
-                <YAxis stroke="var(--color-text-tertiary)" tickFormatter={(v) => `₨${(v / 1000).toFixed(0)}k`} axisLine={false} tickLine={false} />
+                <YAxis stroke="var(--color-text-tertiary)" width={64} tickFormatter={(v) => (v >= 1e6 ? `Rs ${(v / 1e6).toFixed(1)}M` : `Rs ${(v / 1000).toFixed(0)}k`)} axisLine={false} tickLine={false} />
                 <Tooltip content={<Tip />} />
                 <Area type="monotone" dataKey="revenue" stroke="#3498DB"
                   fill="url(#g2)" strokeWidth={3} name="Daily Revenue" />

@@ -14,6 +14,10 @@ export async function apiRequest(path, options = {}) {
     headers,
     credentials: 'same-origin',
   });
+  if (response.status === 401 && token && !path.startsWith('/v1/auth/')) {
+    // Token expired or the backend's signing key changed: log out cleanly.
+    window.dispatchEvent(new Event('bbq:auth-expired'));
+  }
   if (!response.ok) {
     const payload = await response.json().catch(() => ({}));
     const error = new Error(payload.detail || `Request failed (${response.status})`);
